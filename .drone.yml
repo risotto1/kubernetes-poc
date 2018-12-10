@@ -35,7 +35,22 @@ steps:
     commands:
       - echo "test-example"
       - printenv
-
 trigger:
   event:
     - pull_request
+
+---
+kind: pipeline
+name: switch
+
+steps:
+  - name: switch
+    image: alpine
+    commands:
+      - echo "switched"
+    when:
+      target: switch
+
+trigger:
+  event:
+    - promote
