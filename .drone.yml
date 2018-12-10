@@ -11,7 +11,7 @@ steps:
   - name: build
     image: alpine
     commands:
-      - echo "build-example"
+      - echo "build-exampffffffle"
 
   - name: staging
     image: alpine
