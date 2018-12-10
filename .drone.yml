@@ -29,7 +29,7 @@ trigger:
 kind: pipeline
 name: pr
 
-steps:
+sfs:
   - name: tests
     image: alpine
     commands:
