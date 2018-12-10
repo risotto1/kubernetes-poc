@@ -29,6 +29,10 @@ spec:
           image: drone/drone:1.0.0-rc.2
           imagePullPolicy: IfNotPresent
           env:
+            - name: DRONE_GIT_ALWAYS_AUTH
+              value: "false"
+            - name: DRONE_GITLAB_SERVER
+              value: "https://gitlab.com"
             - name: DRONE_GITLAB_CLIENT_ID
               value: "e1ac353a7b035579d52fbabb86115e5deebc46e971a6f05696a950bc4844936b"
             - name: DRONE_GITLAB_CLIENT_SECRET
