@@ -29,10 +29,10 @@ spec:
           image: drone/drone:1.0.0-rc.2
           imagePullPolicy: IfNotPresent
           env:
-            - name: DRONE_BITBUCKET_CLIENT_ID
-              value: "jVwEgzhqNSYE2qdtqu"
-            - name: DRONE_BITBUCKET_CLIENT_SECRET
-              value: "BmgDYMbvefD3wgjQM2r6Vbd4qNkXzKPz"
+            - name: DRONE_GITLAB_CLIENT_ID
+              value: "e1ac353a7b035579d52fbabb86115e5deebc46e971a6f05696a950bc4844936b"
+            - name: DRONE_GITLAB_CLIENT_SECRET
+              value: "1f17040406f60cb3f42b6c7a50fc68128d082d7495eb19c961e9f344d8c0f74e"
             - name: DRONE_RPC_SECRET
               value: "123"
             - name: DRONE_SERVER_HOST
@@ -44,7 +44,7 @@ spec:
             - name: DRONE_TLS_AUTOCERT
               value: "false"
             - name: DRONE_USER_CREATE
-              value: "username:GoFas7,machine:false,admin:true,token:6457a26d2e804097e9a228bc4287f975"
+              value: "username:GoingFast,machine:false,admin:true,token:6457a26d2e804097e9a228bc4287f975"
           ports:
             - name: http
               containerPort: 80
