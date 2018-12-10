@@ -28,11 +28,11 @@ trigger:
 kind: pipeline
 name: pr
 
-sfs:
+steps:
   - name: tests
     image: alpine
     commands:
-      - echo "test-example13"
+      - echo "test-examplev13"
       - printenv
 trigger:
   event:
