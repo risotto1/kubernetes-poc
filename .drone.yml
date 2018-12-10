@@ -24,3 +24,18 @@ trigger:
     - push
   branch:
     - master
+
+---
+kind: pipeline
+name: pr
+
+steps:
+  - name: tests
+    image: alpine
+    commands:
+      - echo "test-example"
+      - printenv
+
+trigger:
+  event:
+    - pull_request
