@@ -24,7 +24,6 @@ trigger:
     - push
   branch:
     - master
-
 ---
 kind: pipeline
 name: pr
@@ -35,9 +34,5 @@ steps:
     commands:
       - echo "test-eexample"
       - printenv
-
-trigger:
-  event:
-    - pull_request
-  branch:
-    - master
+    when:
+      event: pull_request
