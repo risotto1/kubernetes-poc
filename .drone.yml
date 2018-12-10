@@ -24,7 +24,6 @@ trigger:
     - push
   branch:
     - master
-
 ---
 kind: pipeline
 name: pr
