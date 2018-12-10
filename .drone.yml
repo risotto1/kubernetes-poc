@@ -1,0 +1,26 @@
+---
+kind: pipeline
+name: master
+
+steps:
+  - name: tests
+    image: alpine
+    commands:
+      - echo "test-example"
+
+  - name: build
+    image: alpine
+    commands:
+      - echo "buld-example"
+
+  - name: staging
+    image: alpine
+    commands:
+      - echo "staging-example"
+
+trigger:
+  event:
+    - merge
+    - push
+  branch:
+    - master

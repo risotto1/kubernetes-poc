@@ -1,0 +1,111 @@
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: drone-agent
+  namespace: cicd
+  labels:
+    app: drone
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: drone
+  template:
+    metadata:
+      labels:
+        app: drone
+        type: agent
+    spec:
+      volumes:
+        - name: docker-storage
+          emptyDir: {}
+        - name: vault-certs
+          secret:
+            secretName: vault-certificates
+        - name: ca-volume
+          emptyDir: {}
+      serviceAccountName: drone
+      initContainers:
+        - name: certs
+          image: alpine
+          securityContext:
+            runAsUser: 0
+          command: ['/bin/sh']
+          args: ['-c', "apk add ca-certificates && cd /etc/ssl/certs && cp /var/run/secret/ca/* . && /usr/sbin/update-ca-certificates && cp * /etc/ssl/new"]
+          volumeMounts:
+            - name: vault-certs
+              mountPath: /var/run/secret/ca
+            - name: ca-volume
+              mountPath: /etc/ssl/new
+      containers:
+        - name: agent
+          image: drone/agent:1.0.0-rc.2
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DRONE_RPC_SERVER
+              value: "http://drone-server:80"
+            - name: DRONE_RPC_SECRET
+              value: "123"
+            - name: DOCKER_HOST
+              value: "tcp://127.0.0.1:2375"
+            - name: DRONE_SECRET_SECRET
+              value: "d87a6f11f1293227d5dbff5627c07ecc"
+            - name: DRONE_SECRET_ENDPOINT
+              value: "http://drone-vault:3000"
+        - name: dind
+          image: docker.io/library/docker:18.06.1-ce-dind
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DOCKER_DRIVER
+              value: "overlay2"
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: docker-storage
+              mountPath: /var/lib/docker
+        - name: vault
+          image: drone/vault
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: main
+              containerPort: 3000
+              protocol: TCP
+          env:
+            - name: VAULT_ADDR
+              value: "https://vault.secrets:8200"
+            - name: VAULT_TOKEN_RENEWAL
+              value: "3m"
+            - name: VAULT_TOKEN_TTL
+              value: "5m"
+            - name: VAULT_AUTH_TYPE
+              value: "kubernetes"
+            - name: VAULT_AUTH_MOUNT_POINT
+              value: "kubernetes"
+            - name: VAULT_KUBERNETES_ROLE
+              value: "drone"
+            - name: SECRET_KEY
+              value: "d87a6f11f1293227d5dbff5627c07ecc"
+            - name: DEBUG
+              value: "true"
+          volumeMounts:
+            - name: vault-certs
+              mountPath: /etc/vault
+            - name: ca-volume
+              mountPath: /etc/ssl/certs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: drone-vault
+  namespace: cicd
+spec:
+  selector:
+    app: drone
+    type: agent
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - name: main
+      port: 3000
+      targetPort: 3000
