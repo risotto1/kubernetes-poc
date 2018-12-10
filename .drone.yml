@@ -11,7 +11,7 @@ steps:
   - name: build
     image: alpine
     commands:
-      - echo "buld-example"
+      - echo "build-example"
 
   - name: staging
     image: alpine
@@ -33,7 +33,7 @@ steps:
   - name: tests
     image: alpine
     commands:
-      - echo "test-example123"
+      - echo "test-example13"
       - printenv
 
 trigger:
