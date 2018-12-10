@@ -5,12 +5,13 @@ volumes: [
 hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
 ]) {
   node('master') {
-    bitbucketStatusNotify(buildState: 'INPROGRESS')
     try {
 
       stage('checkout') {
         checkout scm
       }
+
+	  bitbucketStatusNotify(buildState: 'INPROGRESS')
 
       stage('build') {
         container('docker') {
