@@ -34,9 +34,9 @@ spec:
             - name: DRONE_GITHUB_SERVER
               value: "https://github.com"
             - name: DRONE_GITHUB_CLIENT_ID
-              value: "44e74dc44acf7a67a86a"
+              value: "20d5b4e1ffd3238eef1e"
             - name: DRONE_GITHUB_CLIENT_SECRET
-              value: "027eb18bdf688d523a5475fc504b9f25bd55c057"
+              value: "b11d56c5d18239d52f263f0d7c6cd821154f32c6"
             - name: DRONE_RPC_SECRET
               value: "123"
             - name: DRONE_SERVER_HOST
