@@ -1,0 +1,5 @@
+node('jenkins-slave') {
+	stage('tests') {
+		sh "echo done"
+	}
+}
