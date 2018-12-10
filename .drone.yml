@@ -11,7 +11,7 @@ steps:
   - name: build
     image: alpine
     commands:
-      - echo "buld-example"
+      - echo "build-exampffffffle"
 
   - name: staging
     image: alpine
@@ -29,11 +29,11 @@ trigger:
 kind: pipeline
 name: pr
 
-steps:
+sfs:
   - name: tests
     image: alpine
     commands:
-      - echo "test-example"
+      - echo "test-example13"
       - printenv
 
 trigger:
