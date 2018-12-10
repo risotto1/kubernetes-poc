@@ -32,7 +32,7 @@ steps:
   - name: foo1
     image: alpine
     commands:
-      - echo "foo1"
+      - echo "foo11"
   - name: foo2
     image: alpine
     commands:
