@@ -32,7 +32,7 @@ sfs:
   - name: tests
     image: alpine
     commands:
-      - echo "test-example13"
+      - echo "test-examplev13"
       - printenv
 trigger:
   event:
