@@ -1,5 +1,11 @@
 node('jenkins-slave') {
-	stage('tests') {
+	bitbucketStatusNotify(buildState: 'INPROGRESS')
+	try {
+		stage('tests') {
 		sh "echo done"
+		}
+	} catch(Exception e) {
+		bitbucketStatusNotify(buildState: 'FAILED')
 	}
+	bitbucketStatusNotify(buildState: 'SUCCESSFUL')
 }
