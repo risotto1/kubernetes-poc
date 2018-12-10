@@ -1,0 +1,10 @@
+kubernetes:latest
+workflow-aggregator:latest
+workflow-job:latest
+credentials-binding:latest
+bitbucket:latest
+blueocean:latest
+github-oauth:latest
+matrix-auth:latest
+saml:latest
+locale:latest

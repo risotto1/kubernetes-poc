@@ -1,0 +1,50 @@
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: ark
+  namespace: heptio-ark
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ark
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8085"
+        prometheus.io/path: "/metrics"
+    spec:
+      restartPolicy: Always
+      serviceAccountName: ark
+      volumes:
+        - name: plugins
+          emptyDir: {}
+        - name: scratch
+          emptyDir: {}
+      containers:
+        - name: ark
+          image: gcr.io/heptio-images/ark:latest
+          ports:
+            - name: metrics
+              containerPort: 8085
+          command: ["/ark"]
+          args: ["server"]
+          env:
+            - name: ARK_SCRATCH_DIR
+              value: /scratch
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: minio-credentials
+                  key: access_key
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-credentials
+                  key: secret_key
+          volumeMounts:
+            - name: plugins
+              mountPath: /plugins
+            - name: scratch
+              mountPath: /scratch

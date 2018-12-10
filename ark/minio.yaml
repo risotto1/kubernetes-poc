@@ -1,0 +1,102 @@
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: minio
+  namespace: heptio-ark
+  labels:
+    app: minio
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      volumes:
+        - name: storage
+          emptyDir: {}
+        - name: config
+          emptyDir: {}
+      containers:
+        - name: minio
+          image: minio/minio
+          imagePullPolicy: IfNotPresent
+          args: ["server", "/storage", "--config-dir=/config"]
+          env:
+            - name: MINIO_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-credentials
+                  key: "access_key"
+            - name: MINIO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-credentials
+                  key: "secret_key"
+          ports:
+            - name: main
+              containerPort: 9000
+          volumeMounts:
+            - name: storage
+              mountPath: /storage
+            - name: config
+              mountPath: /config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio
+  namespace: heptio-ark
+  labels:
+    app: minio
+spec:
+  selector:
+    app: minio
+  type: NodePort
+  ports:
+    - name: main
+      targetPort: main
+      port: 9000
+      nodePort: 32202
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio-credentials
+  namespace: heptio-ark
+  labels:
+    app: minio
+stringData:
+  access_key: "minio"
+  secret_key: "minio123"
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: minio-setup
+  namespace: heptio-ark
+  labels:
+    app: minio
+spec:
+  template:
+    metadata:
+      name: minio-setup
+    spec:
+      restartPolicy: OnFailure
+      volumes:
+        - name: config
+          emptyDir: {}
+      containers:
+        - name: mc
+          image: minio/mc:latest
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - "mc --config-dir=/config config host add ark http://minio:9000 minio minio123 && mc --config-dir=/config mb -p ark/ark"
+          volumeMounts:
+            - name: config
+              mountPath: "/config"

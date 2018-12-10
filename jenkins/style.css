@@ -1,0 +1,14 @@
+// The theme overwrites this so we need to fix.
+.glyphicon {
+    font-family: 'Glyphicons Halflings' !important;
+}
+
+// Theme has no icon for this.
+.icon-github-branch {
+    background-image: url('/static/ccf6b398/plugin/github-branch-source/images/24x24/github-branch.png');
+}
+
+// Force all icons in that bar to be grayscale.
+.icon-md {
+    filter: grayscale(1);
+}
