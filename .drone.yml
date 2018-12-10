@@ -29,11 +29,23 @@ kind: pipeline
 name: pr
 
 steps:
-  - name: tests
+  - name: foo1
     image: alpine
     commands:
-      - echo "test-examplev13"
-      - printenv
+      - echo "foo1"
+  - name: foo2
+    image: alpine
+    commands:
+      - echo "foo2"
+  - name: foo3
+    image: alpine
+    commands:
+      - echo "foo3"
+  - name: foo4
+    image: alpine
+    commands:
+      - echo "foo4"
+    depends_on: [ foo1, foo2, foo3 ]
 trigger:
   event:
     - pull_request
