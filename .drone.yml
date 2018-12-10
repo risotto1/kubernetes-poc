@@ -33,7 +33,7 @@ steps:
   - name: tests
     image: alpine
     commands:
-      - echo "test-example"
+      - echo "test-eexample"
       - printenv
 
 trigger:
