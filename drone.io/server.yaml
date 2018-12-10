@@ -31,12 +31,12 @@ spec:
           env:
             - name: DRONE_GIT_ALWAYS_AUTH
               value: "false"
-            - name: DRONE_GITLAB_SERVER
-              value: "https://gitlab.com"
-            - name: DRONE_GITLAB_CLIENT_ID
-              value: "e1ac353a7b035579d52fbabb86115e5deebc46e971a6f05696a950bc4844936b"
-            - name: DRONE_GITLAB_CLIENT_SECRET
-              value: "1f17040406f60cb3f42b6c7a50fc68128d082d7495eb19c961e9f344d8c0f74e"
+            - name: DRONE_GITHUB_SERVER
+              value: "https://github.com"
+            - name: DRONE_GITHUB_CLIENT_ID
+              value: "44e74dc44acf7a67a86a"
+            - name: DRONE_GITHUB_CLIENT_SECRET
+              value: "027eb18bdf688d523a5475fc504b9f25bd55c057"
             - name: DRONE_RPC_SECRET
               value: "123"
             - name: DRONE_SERVER_HOST
