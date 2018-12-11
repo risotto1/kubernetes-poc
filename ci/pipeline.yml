@@ -54,7 +54,7 @@ jobs:
   - name: staging
     plan:
       - get: repository
-        trigger: true
+        # trigger: true
         # passed: [test-services]
       - task: deploy
         file: ci/tasks/deploy.yml

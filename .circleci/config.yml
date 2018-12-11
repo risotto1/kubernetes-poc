@@ -1,23 +1,14 @@
 version: 2
 jobs:
-  test-kube-connection:
+  staging:
     working_directory: $HOME
     docker:
       - image: dtzar/helm-kubectl
     steps:
+      - checkout
       - run:
-          name: setup kubectl
-          command: |
-            echo $ca | base64 -d > ca.crt
-            echo $token | base64 -d > token
-            cat ca.crt | tee -a /etc/ssl/certs/ca-certificates.crt
-            kubectl config set-credentials circle --token='$(cat ./token)'
-            kubectl config set-cluster kubernetes --server=$apiserver --certificate-authority=ca.crt
-            kubectl config set-context circle --cluster=kubernetes --user=circle --namespace=default
-            kubectl config use-context circle
-            chmod 755 ~/.kube/config
-            kubectl version
-            kubectl get po -n backend
+          name: Setup kubectl
+          command: ./kubectl-context.sh
 workflows:
   version: 2
   my-workflow:
