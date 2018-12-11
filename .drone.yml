@@ -17,6 +17,7 @@ steps:
     image: alpine
     commands:
       - echo "staging-example"
+    depends_on: [ tests, build ]
 
 trigger:
   event:
