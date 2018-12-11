@@ -1,0 +1,63 @@
+#!/bin/sh
+set -eo pipefail
+
+exec 3>&1
+exec 2>&3
+exec 1>&2
+
+if [ -z "$APISERVER_ADDR" ]; then
+    echo "Missing APISERVER_ADDR"
+    exit 1
+fi
+
+if [ -z "$HELM_INSTALL" ]; then
+    echo "Missing HELM_INSTALL"
+    exit 1
+fi
+
+if [ -z "$CA" ]; then
+    echo "Missing CA"
+    exit 1
+fi
+
+if [ -z "$TOKEN" ]; then
+    echo "Missing TOKEN"
+    exit 1
+fi
+
+setup_kube() {
+    kubectl config set-credentials concourse --token="$(echo $TOKEN | base64 -d)"
+    kubectl config set-cluster kubernetes --server=$APISERVER_ADDR --certificate-authority="$(echo $CA | base64 -d)"
+    kubectl config set-context concourse --cluster=kubernetes --user=concourse --namespace=default
+    kubectl config use-context concourse
+    chmod 755 ~/.kube/config
+    kubectl version
+}
+
+staging() {
+    productionColor=$(helm get values --all $HELM_INSTALL | grep -Po "prod: \K.*" ) 
+    stagingColor=$(helm get values --all $HELM_INSTALL | grep -Po 'staging: \K.*')
+    echo "Staging: $stagingColor\nProduction: $productionColor"
+
+    cd "$(git rev-parse --show-toplevel)/charts/$HELM_INSTALL"
+    helm upgrade --install $HELM_INSTALL . --reuse-values -f env.yaml --set "deployment.$stagingColor.enabled=true" --set "deployment.$stagingColor.client.image.tag=$TAG" --set "deployment.$stagingColor.server.image.tag=$TAG" $ADDITIONAL_STAGING_ARGS
+}
+
+switch() {
+    productionColor=$(helm get values --all $HELM_INSTALL | grep -Po "prod: \K.*" ) 
+    stagingColor=$(helm get values --all $HELM_INSTALL | grep -Po 'staging: \K.*')
+    echo "Staging: $stagingColor\nProduction: $productionColor"
+
+    cd "$(git rev-parse --show-toplevel)/charts/$HELM_INSTALL"
+    helm upgrade --install $HELM_INSTALL . --reuse-values -f env.yaml --set "deployment.prod=$stagingColor" --set deployment.staging=$productionColor $ADDITIONAL_SWITCH_ARGS
+}
+
+setup_kube
+
+if [ -n "$SWITCH" ]; then
+    switch
+fi
+
+if [ -n "$STAGING" ]; then
+    staging_backend
+fi

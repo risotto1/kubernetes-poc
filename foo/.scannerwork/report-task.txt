@@ -1,0 +1,6 @@
+projectKey=key
+serverUrl=http://192.168.205.4:32710
+serverVersion=6.7.3.38370
+dashboardUrl=http://192.168.205.4:32710/dashboard/index/key
+ceTaskId=AWeaF2Fb9T0NGYvq9SfT
+ceTaskUrl=http://192.168.205.4:32710/api/ce/task?id=AWeaF2Fb9T0NGYvq9SfT

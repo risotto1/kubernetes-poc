@@ -1,0 +1,23 @@
+---
+platform: linux
+image_resource:
+  type: docker-image
+  source:
+    repository: dtzar/helm-kubectl
+
+inputs:
+  - name: repository
+
+params:
+  TAG:
+  APISERVER_ADDR:
+  CA:
+  TOKEN:
+  HELM_INSTALL:
+  SWITCH:
+  STAGING:
+  ADDITIONAL_SWITCH_ARGS:
+  ADDITIONAL_STAGING_ARGS:
+
+run:
+  path: repository/ci/deploy

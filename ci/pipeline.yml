@@ -1,0 +1,65 @@
+---
+resources:
+  # - name: server
+  #   type: docker-image
+  #   source:
+  #     repository: risla8/backend-server
+  #     username: risla8
+  #     password: lol11lol11
+
+  # - name: client
+  #   type: docker-image
+  #   source:
+  #     repository: risla8/backend-client
+  #     username: risla8
+  #     password: lol11lol11
+
+  - name: repository
+    type: git
+    source:
+      branch: master
+      uri: https://github.com/risotto1/backend
+
+
+jobs:
+  # - name: build-docker-images
+  #   serial_groups: [docker-image-jobs]
+  #   plan:
+  #     - aggregate:
+  #         - get: repository
+  #           trigger: true
+  #         - put: server
+  #           params:
+  #             dockerfile: ./docker/Dockerfile.server
+  #             tag_file: repository/.git/short_ref
+  #             tag_as_latest: true
+  #             get_params:
+  #               skip_download: true
+  #         - put: client
+  #           params:
+  #             dockerfile: ./docker/Dockerfile.client
+  #             tag_file: repository/.git/short_ref
+  #             tag_as_latest: true
+  #             get_params:
+  #               skip_download: true
+  # - name: test-services
+  #   serial_groups: [test-jobs]
+  #   plan:
+  #     - get: repository
+  #       trigger: true
+  #       passed: [build-docker-images]
+  #     - task: test
+  #       file: ci/tasks/test.yml
+
+  - name: staging
+    plan:
+      - get: repository
+        trigger: true
+        # passed: [test-services]
+      - task: deploy
+        file: ci/tasks/deploy.yml
+        params:
+          APISERVER_ADDR: ((apiserver_addr))
+          CA: ((ca))
+          TOKEN: ((token))
+          HELM_INSTALL: test
