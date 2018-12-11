@@ -1,5 +1,4 @@
 version: 2
-
 jobs:
   test-kube-connection:
     working_directory: $HOME
@@ -20,9 +19,9 @@ jobs:
             chmod 755 ~/.kube/config
             kubectl version
             kubectl get po -n backend
-workflow:
+workflows:
   version: 2
-  my-esms:
+  my-workflow:
     jobs:
       - test-kube-connection:
           context: k8s
