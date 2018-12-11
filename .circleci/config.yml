@@ -1,6 +1,6 @@
-version: 2
 jobs:
   test-kube-connection:
+    working_directory: $HOME
     docker:
       - image: dtzar/helm-kubectl
     steps:
@@ -19,6 +19,7 @@ jobs:
             kubectl version
             kubectl get po -n backend
 workflow:
+  version: 2
   my-workflow:
     jobs:
       - test-kube-connection:
