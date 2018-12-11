@@ -18,7 +18,9 @@ resources:
     type: git
     source:
       branch: master
-      uri: https://github.com/risotto1/backend
+      uri: https://github.com/risotto1/kubernetes-poc
+      username: GoingFast
+      password: 34lahe56
 
 
 jobs:
@@ -54,10 +56,10 @@ jobs:
   - name: staging
     plan:
       - get: repository
-        # trigger: true
+        trigger: true
         # passed: [test-services]
       - task: deploy
-        file: ci/tasks/deploy.yml
+        file: repository/ci/tasks/deploy.yml
         params:
           APISERVER_ADDR: ((apiserver_addr))
           CA: ((ca))
