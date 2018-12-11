@@ -41,7 +41,7 @@ spec:
       containers:
         - name: agent
           image: drone/agent:1.0.0-rc.2
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: DRONE_RPC_SERVER
               value: "http://drone-server:80"

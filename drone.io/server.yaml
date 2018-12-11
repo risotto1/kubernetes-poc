@@ -27,7 +27,7 @@ spec:
       containers:
         - name: drone-server
           image: drone/drone:1.0.0-rc.2
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: DRONE_GIT_ALWAYS_AUTH
               value: "false"
