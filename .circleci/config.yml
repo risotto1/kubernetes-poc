@@ -13,7 +13,7 @@ jobs:
             cat ca.crt
             cat token
             kubectl config set-credentials circle --token='$(cat ./token)'
-            kubectl config set-cluster kubernetes --server=https://idoneus.serveo.net --certificate-authority=ca.crt
+            kubectl config set-cluster kubernetes --server=https://idoneus.serveo.net --insecure-skip-tls-verify=true
             kubectl config set-context circle --cluster=kubernetes --user=circle --namespace=default
             kubectl config use-context circle
             chmod 755 ~/.kube/config
