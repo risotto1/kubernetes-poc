@@ -45,7 +45,6 @@ steps:
     image: alpine
     commands:
       - echo "foo4"
-    depends_on: [ foo1, foo2, foo3 ]
 trigger:
   event:
     - pull_request
