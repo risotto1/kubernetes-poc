@@ -10,7 +10,7 @@ jobs:
           command: |
             echo $ca | base64 -d > ca.crt
             echo $token | base64 -d > token
-            cat ca.crt | sudo tee -a /etc/ssl/certs/ca-certificates.crt
+            cat ca.crt | tee -a /etc/ssl/certs/ca-certificates.crt
             kubectl config set-credentials circle --token='$(cat ./token)'
             kubectl config set-cluster kubernetes --server=$apiserver --certificate-authority=ca.crt
             kubectl config set-context circle --cluster=kubernetes --user=circle --namespace=default
