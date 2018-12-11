@@ -20,4 +20,4 @@ params:
   ADDITIONAL_STAGING_ARGS:
 
 run:
-  path: repository/ci/deploy
+  path: repository/ci/tasks/deploy
